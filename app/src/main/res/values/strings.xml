@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Lion School</string>
+
+
+    <string name="lion_school">Lion School</string>
+    <string name="manage_courses_students">Manage courses, students and grades quickly and easily!</string>
+    <string name="get_started">Get Started</string>
+
+
+</resources>
