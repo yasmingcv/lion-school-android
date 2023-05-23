@@ -6,5 +6,9 @@
     <string name="manage_courses_students">Manage courses, students and grades quickly and easily!</string>
     <string name="get_started">Get Started</string>
 
+    <string name="title_activity_courses">CoursesActivity</string>
+    <string name="find_course">Find Course</string>
+    <string name="courses">Courses</string>
+
 
 </resources>
