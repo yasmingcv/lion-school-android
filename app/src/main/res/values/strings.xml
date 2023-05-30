@@ -9,6 +9,7 @@
     <string name="title_activity_courses">CoursesActivity</string>
     <string name="find_course">Find Course</string>
     <string name="courses">Courses</string>
+    <string name="title_activity_students">StudentsActivity</string>
 
 
 </resources>

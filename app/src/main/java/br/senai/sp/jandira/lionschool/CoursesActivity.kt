@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.lionschool
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -15,9 +16,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +29,7 @@ import br.senai.sp.jandira.lionschool.model.Course
 import br.senai.sp.jandira.lionschool.model.CourseList
 import br.senai.sp.jandira.lionschool.service.RetrofitFactory
 import br.senai.sp.jandira.lionschool.ui.theme.ui.theme.LionSchoolTheme
+import coil.compose.AsyncImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +48,13 @@ class CoursesActivity : ComponentActivity() {
 @Composable
 fun CoursesScreen() {
 
+    val context = LocalContext.current
+
     var searchState by remember {
+        mutableStateOf("")
+    }
+
+    var courseState by remember {
         mutableStateOf("")
     }
 
@@ -53,13 +64,16 @@ fun CoursesScreen() {
 
     val call = RetrofitFactory().getCourseService().getCourse()
 
+
+
     call.enqueue(object : Callback<CourseList> {
         override fun onResponse(
             call: Call<CourseList>,
             response: Response<CourseList>
         ) {
-            listcourse = response.body()!!.result
+            listcourse = response.body()!!.cursos
         }
+
 
         override fun onFailure(call: Call<CourseList>, t: Throwable) {
             Log.i(
@@ -133,66 +147,63 @@ fun CoursesScreen() {
 
             LazyColumn() {
                 items(listcourse) {
+
+
                     //Course's card
-                    Card(
+                    Button(
+                        onClick = {
+                            val openStudentsActivity = Intent(context, StudentsActivity::class.java)
+                            openStudentsActivity.putExtra("Curso", "${it.sigla}")
+                            context.startActivity(openStudentsActivity)
+                        },
                         modifier = Modifier
                             .height(190.dp)
                             .fillMaxWidth(),
-                        backgroundColor = Color(51, 71, 176),
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(Color(51, 71, 176))
                     ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                                 .padding(start = 20.dp),
                             verticalArrangement = Arrangement.SpaceEvenly
 
                         ) {
                             Row(
                                 modifier = Modifier
-                                    .width(180.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                    .width(250.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_code_24),
+                                AsyncImage(
+                                    model = it.icone,
                                     contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(90.dp)
+                                    colorFilter = ColorFilter.tint(Color.White),
+                                    modifier = Modifier.height(70.dp)
                                 )
+
+                                Spacer(modifier = Modifier.width(20.dp))
+
                                 Text(
-                                    text = "DS",
+                                    text = "${it.sigla}",
                                     fontSize = 60.sp,
                                     color = Color.White,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.ExtraBold,
+                                    textAlign = TextAlign.Left
                                 )
                             }
 
                             Text(
-                                text = "Técnico em desenvolvimento de sistemas",
+                                text = "${it.nome}".substring(6),
                                 color = Color.White,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.SemiBold
 
                             )
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_access_time_filled_24),
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(24.dp)
-                                )
-
-                                Text(
-                                    text = "1200h",
-                                    color = Color.White,
-                                    fontSize = 22.sp,
-                                    modifier = Modifier.padding(10.dp)
-                                )
-                            }
                         }
                     }
+
+                    
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
 
