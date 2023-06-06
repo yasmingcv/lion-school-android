@@ -17,4 +17,8 @@ class RetrofitFactory {
     fun getCourseService(): CourseService {
         return retrofitFactory.create(CourseService::class.java)
     }
+
+    fun getStudentService(): StudentService {
+        return retrofitFactory.create(StudentService::class.java)
+    }
 }

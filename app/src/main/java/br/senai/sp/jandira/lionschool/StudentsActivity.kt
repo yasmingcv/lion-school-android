@@ -1,8 +1,5 @@
 package br.senai.sp.jandira.lionschool
 
-import android.content.Intent
-import android.content.Intent.getIntent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,10 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -22,8 +18,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.lionschool.model.Student
+import br.senai.sp.jandira.lionschool.model.StudentList
+import br.senai.sp.jandira.lionschool.service.RetrofitFactory
 import br.senai.sp.jandira.lionschool.ui.theme.LionSchoolTheme
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class StudentsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +41,32 @@ class StudentsActivity : ComponentActivity() {
 @Composable
 fun StudentsScreen(sigla: String) {
 
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)
+    var listStudent by remember {
+        mutableStateOf(listOf<Student>())
+    }
+
+    val call = RetrofitFactory().getStudentService().getStudents(sigla)
+
+    call.enqueue(object : Callback<StudentList>{
+        override fun onResponse(
+            call: Call<StudentList>,
+            response: Response<StudentList>
+        ) {
+            listStudent = response.body()!!.alunos
+        }
+
+        override fun onFailure(call: Call<StudentList>, t: Throwable) {
+            Log.i(
+                "ds2t",
+                "${t.message}"
+            )
+        }
+    })
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
@@ -74,8 +98,6 @@ fun StudentsScreen(sigla: String) {
                 }
             }
 
-
-            Text(text = sigla )
 
         }
     }
