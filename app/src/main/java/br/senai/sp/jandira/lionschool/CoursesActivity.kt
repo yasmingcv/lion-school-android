@@ -154,6 +154,7 @@ fun CoursesScreen() {
                         onClick = {
                             val openStudentsActivity = Intent(context, StudentsActivity::class.java)
                             openStudentsActivity.putExtra("Curso", "${it.sigla}")
+                            openStudentsActivity.putExtra("Nome_Curso", "${it.nome}")
                             context.startActivity(openStudentsActivity)
                         },
                         modifier = Modifier

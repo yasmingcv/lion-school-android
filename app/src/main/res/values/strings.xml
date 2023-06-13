@@ -10,6 +10,11 @@
     <string name="find_course">Find Course</string>
     <string name="courses">Courses</string>
     <string name="title_activity_students">StudentsActivity</string>
+    <string name="all">All</string>
+    <string name="finished">Finished</string>
+    <string name="studying">Studying</string>
+    <string name="registration">Registration</string>
+    <string name="title_activity_student_description">StudentDescription</string>
 
 
 </resources>

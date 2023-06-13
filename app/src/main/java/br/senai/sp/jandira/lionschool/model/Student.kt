@@ -4,5 +4,6 @@ data class Student (
     val nome: String,
     val matricula: String,
     val status: String,
-    val foto: String
+    val foto: String,
+    val curso: Course?
 )

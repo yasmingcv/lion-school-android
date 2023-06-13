@@ -9,9 +9,4 @@ interface CourseService {
     @GET("cursos")
     fun getCourse(): Call<CourseList>
 
-    //@GET("alunos?curso={sigla}")
-    //fun getStudentsCourse(@Query("sigla") sigla: String)
-
-    //alunos?curso=rds
-
 }
